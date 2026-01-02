@@ -11,7 +11,7 @@
         @switch($user->role)
             @case(App\Models\User::ROLE_ADMIN) Admin @break
             @case(App\Models\User::ROLE_INSTRUCTOR) Instructor @break
-            @default Student
+            @default Staff
         @endswitch
     </li>
     <li class="list-group-item">

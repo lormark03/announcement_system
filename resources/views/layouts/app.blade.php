@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Student Portal System</title>
+    <title>Campus Announcement System</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -122,7 +122,7 @@
 
 {{-- ================= HEADER ================= --}}
 <header class="app-header">
-    <span class="fw-bold h5 mb-0">Student Portal System</span>
+    <span class="fw-bold h5 mb-0">Campus Announcement System</span>
     @auth
         <span class="small text-muted">{{ auth()->user()->username }}</span>
     @endauth
@@ -148,7 +148,7 @@
                     @switch($user->role)
                         @case(App\Models\User::ROLE_ADMIN) Admin @break
                         @case(App\Models\User::ROLE_INSTRUCTOR) Instructor @break
-                        @default Student
+                        @default Staff
                     @endswitch
                 </div>
             </div>

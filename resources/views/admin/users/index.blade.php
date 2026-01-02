@@ -12,7 +12,7 @@
             <th>ID</th>
             <th>Username</th>
             <th>Email</th>
-            <th>Avatar</th>
+            <th>Profile</th>
             <th>Role</th>
             <th>Actions</th>
         </tr>
@@ -42,7 +42,7 @@
                     @switch($user->role)
                         @case(App\Models\User::ROLE_ADMIN) Admin @break
                         @case(App\Models\User::ROLE_INSTRUCTOR) Instructor @break
-                        @default Student
+                        @default Staff
                     @endswitch
                 </td>
 

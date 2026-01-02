@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="mb-4">
-    <h1 class="h4 mb-1">Dashboard</h1>
-    <p class="text-muted mb-0">Welcome back, {{ auth()->user()->username }}.</p>
+    <h1 class="h4 mb-1"> Staff Dashboard</h1>
+    <p class="text-muted mb-0">Welcome, {{ auth()->user()->username }}.</p>
 </div>
 
 <div class="row g-3">

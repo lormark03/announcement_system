@@ -32,7 +32,7 @@ class AuthController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => User::ROLE_STUDENT, // default to student
+            'role' => User::ROLE_STAFF, // default to staff
             'profile' => $profilePath,
         ]);
 
@@ -83,7 +83,7 @@ class AuthController extends Controller
         return match($user->role) {
             User::ROLE_ADMIN => redirect()->route('dashboard.admin'),
             User::ROLE_INSTRUCTOR => redirect()->route('dashboard.instructor'),
-            default => redirect()->route('dashboard.student'),
+            default => redirect()->route('dashboard.staff'),
         };
     }
 }

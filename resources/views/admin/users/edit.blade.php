@@ -44,7 +44,7 @@
                 <select name="role" class="form-control">
                     <option value="0" {{ $user->role === App\Models\User::ROLE_ADMIN ? 'selected' : '' }}>Admin</option>
                     <option value="1" {{ $user->role === App\Models\User::ROLE_INSTRUCTOR ? 'selected' : '' }}>Instructor</option>
-                    <option value="3" {{ $user->role === App\Models\User::ROLE_STUDENT ? 'selected' : '' }}>Student</option>
+                    <option value="3" {{ $user->role === App\Models\User::ROLE_STAFF ? 'selected' : '' }}>Staff</option>
                 </select>
             </div>
 

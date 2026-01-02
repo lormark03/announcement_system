@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'Student Portal') }} - Auth</title>
+    <title>{{ config('app.name', 'Campus Announcement System') }} - Auth</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
@@ -36,7 +36,7 @@
             <span class="brand-logo me-2">
                 {{ strtoupper(substr(config('app.name', 'S'), 0, 1)) }}
             </span>
-            <span class="fw-bold">{{ config('app.name', 'Student Portal') }}</span>
+            <span class="fw-bold">{{ config('app.name', 'Campus Announcement System') }}</span>
         </a>
     </div>
 </nav>

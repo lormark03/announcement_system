@@ -66,7 +66,7 @@
         <div class="mb-3">
             <label class="form-label">Role</label>
             <select name="role" class="form-control">
-                <option value="{{ \App\Models\User::ROLE_STUDENT }}" {{ old('role') == \App\Models\User::ROLE_STUDENT ? 'selected' : '' }}>Student</option>
+                <option value="{{ \App\Models\User::ROLE_STAFF }}" {{ old('role') == \App\Models\User::ROLE_STAFF ? 'selected' : '' }}>Staff</option>
                 <option value="{{ \App\Models\User::ROLE_INSTRUCTOR }}" {{ old('role') == \App\Models\User::ROLE_INSTRUCTOR ? 'selected' : '' }}>Instructor</option>
                 <option value="{{ \App\Models\User::ROLE_ADMIN }}" {{ old('role') == \App\Models\User::ROLE_ADMIN ? 'selected' : '' }}>Admin</option>
             </select>

@@ -38,7 +38,8 @@ Route::middleware('auth')->get('/dashboard', function () {
     return match($user->role) {
         User::ROLE_ADMIN => redirect()->route('dashboard.admin'),
         User::ROLE_INSTRUCTOR => redirect()->route('dashboard.instructor'),
-        default => redirect()->route('dashboard.student'),
+        User::ROLE_STAFF => redirect()->route('dashboard.staff'),
+        default => redirect()->route('dashboard.staff'), // fallback
     };
 })->name('dashboard');
 
@@ -46,15 +47,14 @@ Route::middleware('auth')->get('/dashboard', function () {
 Route::get('/admin/dashboard', function () {
     $totalUsers = User::count();
     $adminsCount = User::where('role', User::ROLE_ADMIN)->count();
+    $staffCount = User::where('role', User::ROLE_STAFF)->count();
     $instructorsCount = User::where('role', User::ROLE_INSTRUCTOR)->count();
-    $studentsCount = User::where('role', User::ROLE_STUDENT)->count();
 
     $recentUsers = User::latest()->limit(10)->get();
-
     $announcements = Announcement::where('is_active', true)->latest()->get();
 
     return view('dashboards.admin', compact(
-        'totalUsers','adminsCount','instructorsCount','studentsCount','recentUsers','announcements'
+        'totalUsers','adminsCount','staffCount','instructorsCount','recentUsers','announcements'
     ));
 })->middleware(\App\Http\Middleware\IsAdmin::class)->name('dashboard.admin');
 
@@ -70,8 +70,9 @@ Route::get('/instructor/dashboard', function () {
     return view('dashboards.instructor', compact('announcements'));
 })->middleware(\App\Http\Middleware\IsInstructor::class)->name('dashboard.instructor');
 
-// Student dashboard
-Route::get('/student/dashboard', function () {
+// Staff dashboard (previously student)
+Route::get('/staff/dashboard', function () {
     $announcements = Announcement::where('is_active', true)->latest()->get();
-    return view('dashboards.student', compact('announcements'));
-})->middleware(\App\Http\Middleware\IsStudent::class)->name('dashboard.student');
+    return view('dashboards.staff', compact('announcements'));
+})->middleware(\App\Http\Middleware\IsStaff::class)->name('dashboard.staff');
+
