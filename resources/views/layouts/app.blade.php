@@ -3,99 +3,176 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'Student Portal') }}</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <title>Student Portal System</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --header-height: 56px;
+            --sidebar-width: 260px;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            background: #f5f7fb;
+            overflow-x: hidden;
+        }
+
+        /* ================= HEADER ================= */
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background: #ffffff;
+            border-bottom: 1px solid #dee2e6;
+            z-index: 1030;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            justify-content: space-between;
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            width: var(--sidebar-width);
+            height: calc(100vh - var(--header-height));
+            background: #ffffff;
+            border-right: 1px solid #dee2e6;
+            display: flex;
+            flex-direction: column;
+            z-index: 1020;
+        }
+
+        .sidebar-header {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            background: #0d6efd;
+            color: #fff;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-menu {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+        }
+
+        .sidebar-link {
+            display: block;
+            padding: 10px 14px;
+            margin-bottom: 6px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #495057;
+            font-weight: 500;
+        }
+
+        .sidebar-link:hover {
+            background: #f1f3f5;
+            color: #0d6efd;
+        }
+
+        .sidebar-logout {
+            padding: 12px;
+            border-top: 1px solid #dee2e6;
+        }
+
+        /* ================= MAIN CONTENT ================= */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--header-height);
+            padding: 24px;
+            min-height: calc(100vh - var(--header-height));
+        }
+    </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-        <button id="sidebarToggle" class="btn btn-sm btn-outline-secondary d-md-none me-2">☰</button>
-        <a class="navbar-brand" href="{{ url('/') }}">{{ config('app.name', 'Student Portal') }}</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav ms-auto">
-                @auth
-                    <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <li class="nav-item">
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button class="btn btn-link nav-link" type="submit">Logout</button>
-                        </form>
-                    </li>
-                @else
-                    <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li>
-                @endauth
-            </ul>
+
+{{-- ================= HEADER ================= --}}
+<header class="app-header">
+    <span class="fw-bold h5 mb-0">Student Portal System</span>
+ @auth
+        <span class="small text-muted">{{ auth()->user()->username }}</span>
+    @endauth
+</header>
+
+{{-- ================= SIDEBAR ================= --}}
+<div class="sidebar">
+    @auth
+        {{-- User Info --}}
+        <div class="sidebar-header">
+            <div class="avatar">{{ strtoupper(substr(auth()->user()->username, 0, 1)) }}</div>
+            <div>
+                <div class="fw-bold">{{ auth()->user()->username }}</div>
+                <div class="text-muted small">
+                    @switch(auth()->user()->role)
+                        @case(App\Models\User::ROLE_ADMIN) Admin @break
+                        @case(App\Models\User::ROLE_INSTRUCTOR) Instructor @break
+                        @default Student
+                    @endswitch
+                </div>
+            </div>
         </div>
-    </div>
-</nav>
-<script>
-    document.getElementById('sidebarToggle')?.addEventListener('click', function (e) {
-        e.preventDefault();
-        document.body.classList.toggle('sidebar-open');
-    });
-</script>
 
-<style>
-    :root { --primary: #0d6efd; }
-    .app-layout { min-height: calc(100vh - 56px); }
+        {{-- Menu Links --}}
+        <div class="sidebar-menu">
+            <a href="{{ route('dashboard') }}" class="sidebar-link">Dashboard</a>
 
-    /* Ensure the main layout uses flexbox stretching so sidebar matches main content height */
-    .d-flex { align-items: stretch; }
+            @if(auth()->user()->role === App\Models\User::ROLE_ADMIN)
+                <a href="{{ route('admin.users.index') }}" class="sidebar-link">Manage Users</a>
+                <a href="{{ route('admin.announcements.index') }}" class="sidebar-link">Announcements</a>
+            @endif
 
-    .sidebar {
-        width: 250px;
-        min-width: 250px;
-        max-width: 250px;
-        /* Let the sidebar height be determined by the main content (flex stretch) */
-        position: relative;
-        align-self: stretch;
-        overflow: auto;
-        background: #fff;
-    }
+            @if(auth()->user()->role === App\Models\User::ROLE_INSTRUCTOR)
+                <a href="#" class="sidebar-link">Courses</a>
+            @endif
 
-    @media (min-width: 768px) {
-        /* Desktop: keep the sidebar visually aligned; allow internal scroll if content exceeds main */
-        .sidebar { top: 0; }
-    }
+            <a href="{{ route('profile.edit') }}" class="sidebar-link">My Profile</a>
+        </div>
 
-    @media (max-width: 767px) {
-        /* Mobile: sidebar becomes an overlay when toggled */
-        .sidebar {
-            display: none;
-            position: fixed;
-            left: 0;
-            top: 56px;
-            bottom: 0;
-            height: auto;
-            z-index: 1050;
-            box-shadow: 0 6px 24px rgba(0,0,0,0.08);
-        }
+        {{-- Sidebar Logout (optional extra) --}}
+        <div class="sidebar-logout">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="btn btn-danger w-100">Logout</button>
+            </form>
+        </div>
+    @else
+        <div class="p-3">
+            <p>Please <a href="{{ route('login') }}">login</a> or <a href="{{ route('register') }}">register</a>.</p>
+        </div>
+    @endauth
+</div>
 
-        body.sidebar-open .sidebar {
-            display: block;
-        }
-    }
-</style>
-
-<div class="container-fluid py-4 app-layout">
-    @if(session('status'))
-        <div class="alert alert-success">{{ session('status') }}</div>
-    @endif
-
-    <div class="d-flex">
-        @hasSection('no_sidebar')
-        @else
-            <aside class="sidebar">
-                @include('partials.sidebar')
-            </aside>
-        @endif
-
-        <main class="flex-fill ms-3">
-            @yield('content')
-        </main>
+{{-- ================= MAIN CONTENT ================= --}}
+<div class="main-content">
+    <div class="container-fluid">
+        @yield('content')
     </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
